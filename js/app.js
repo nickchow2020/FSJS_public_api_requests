@@ -98,12 +98,17 @@ function searchBar(date){
 
     search.addEventListener("keyup",(e)=>{
        const searchValue = search.value.toLowerCase();
+       const searchResults = [];
        for(let i = 0; i < results.length; i ++){
            const firstName = results[i].name.first.toLowerCase();
            if(firstName.includes(searchValue)){
-               console.log("YES")
+               searchResults.push(results[i])
            }
+           const searchHTML = galleryMarkup(searchResults);
+           printGellery(searchHTML);
        }
+
+       
     })
 
     return results
@@ -125,9 +130,8 @@ function printGellery(date){
 
 getJSON(generateAPIUrl)
 .then(searchBar)
-.then(date => console.log(date))
-// .then(galleryMarkup)
-// .then(printGellery)
+.then(galleryMarkup)
+.then(printGellery)
 
 
 
