@@ -14,7 +14,7 @@ const searchDiv = document.querySelector(".search-container")
      try{
         const twelveUser = await fetch(url);
         const twelveUserJson = await twelveUser.json();
-        return twelveUserJson;
+        return twelveUserJson.results;
      }catch(err){
          throw err
      }
@@ -23,26 +23,54 @@ const searchDiv = document.querySelector(".search-container")
 /**
  * Function that request the date from the server 
  * and generate gallery markup HTML and retrun as string
- * @param {JSON} a request APIs URL address
+ * @param {JSON} a array of object that container employee information
  */
-function galleryMarkup(date){
-    const allUser = date.map(user => {
-        const galleryHTML = 
-        `
-        <div class="card">
-            <div class="card-img-container">
-                <img class="card-img" src="${user.picture.large}" alt="profile picture">
-            </div>
-            <div class="card-info-container">
-                <h3 id="name class="card-name cap">${user.name.first}</h3>
-                <p class="card-text">${user.email}</p>
-                <p class="card-text">${user.location.city}, ${user.location.state}</p>
-            </div>
-        </div>
-        `
-        return galleryHTML;
+function galleryMarkupAppend(date){
+    const resultDate = date;
+    for(let i=0; i<resultDate.length; i++){
+
+    const cardDiv = document.createElement("div");
+    const imgDiv = document.createElement("div");
+    const infoDiv = document.createElement("div");
+    const img = document.createElement('img');
+    const h3Name = document.createElement("h3");
+    const emailP = document.createElement("p")
+    const cityStateP = document.createElement("p")
+
+    cardDiv.classList.add("card");
+    imgDiv.classList.add("card-img-container");
+    infoDiv.classList.add("card-info-container");
+    emailP.classList.add("card-text");
+    cityStateP.classList.add("card-text","cap");
+    const imgAttributes = {
+        class: "card-img",
+        src: resultDate[i].picture.large,
+        alt: "profile picture"
+    }
+
+    const firstAttributes = {
+        id:"name",
+        class:"card-name cap"
+    }
+    h3Name.textContent = resultDate[i].name.first;
+    emailP.textContent = resultDate[i].email;
+    cityStateP.textContent = `${resultDate[i].location.city} ${resultDate[i].location.state}`;
+
+    setAttributes(img,imgAttributes);
+    setAttributes(h3Name,firstAttributes)
+    gallery.appendChild(cardDiv);
+    cardDiv.appendChild(imgDiv);
+    cardDiv.appendChild(infoDiv);
+    imgDiv.appendChild(img)
+    infoDiv.appendChild(h3Name)
+    infoDiv.appendChild(emailP)
+    infoDiv.appendChild(cityStateP)
+
+    cardDiv.addEventListener("click",(e)=>{
+        console.log(e.target)
     })
-    return allUser.join("");
+    }
+    return resultDate
 }
 
 /**
@@ -61,10 +89,10 @@ function setAttributes(element,object){
 
 /**
  * function that is going to create search bar and it's functionality.
- * @param {} date 
+ * @param {JSON} date that retrieve from the fetch() request
  */
 function searchBar(date){
-    const results = date.results;
+    const results = date;
     const form = document.createElement("form");
     const search = document.createElement("input");
     const submit = document.createElement("input");
@@ -96,42 +124,24 @@ function searchBar(date){
     form.appendChild(search);
     form.appendChild(submit);
 
-    search.addEventListener("keyup",(e)=>{
+    search.addEventListener("keyup",()=>{
        const searchValue = search.value.toLowerCase();
        const searchResults = [];
        for(let i = 0; i < results.length; i ++){
            const firstName = results[i].name.first.toLowerCase();
            if(firstName.includes(searchValue)){
                searchResults.push(results[i])
-           }
-           const searchHTML = galleryMarkup(searchResults);
-           printGellery(searchHTML);
-       }
-
-       
+           };
+       };
+       gallery.innerHTML = "";
+       galleryMarkupAppend(searchResults);
     })
-
-    return results
-}
-
-
-
-
-
-
-/**
- * Function that print the gallery markup to index.html 
- * @param {String} a request APIs URL address
- */
-function printGellery(date){
-    gallery.innerHTML = date;
 }
 
 
 getJSON(generateAPIUrl)
+.then(galleryMarkupAppend)
 .then(searchBar)
-.then(galleryMarkup)
-.then(printGellery)
 
 
 
