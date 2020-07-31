@@ -3,8 +3,7 @@
 */
 const generateAPIUrl = "https://randomuser.me/api/?results=12";
 const gallery = document.getElementById("gallery");
-
-
+const searchDiv = document.querySelector(".search-container")
 
 
 /**
@@ -27,8 +26,7 @@ const gallery = document.getElementById("gallery");
  * @param {JSON} a request APIs URL address
  */
 function galleryMarkup(date){
-    const results = date.results;
-    const allUser = results.map(user => {
+    const allUser = date.map(user => {
         const galleryHTML = 
         `
         <div class="card">
@@ -48,6 +46,75 @@ function galleryMarkup(date){
 }
 
 /**
+ * function that allow to generate multiple attribute at one single step,
+ * by using for in loops
+ * @param {element}  element needs set attribute
+ * @param {object}  object of attribute in key-value pair
+ */
+function setAttributes(element,object){
+    for(let key in object){
+        element.setAttribute(key,object[key])
+    }
+}
+
+
+
+/**
+ * function that is going to create search bar and it's functionality.
+ * @param {} date 
+ */
+function searchBar(date){
+    const results = date.results;
+    const form = document.createElement("form");
+    const search = document.createElement("input");
+    const submit = document.createElement("input");
+
+    const attributesForm = {
+        action : "#",
+        method : "get"
+    }
+
+    const attributesSearch = {
+        type : "search",
+        id : "search-input",
+        class: "search-input",
+        placeholder: "Search..."
+    }
+
+    const attributesSubmit = {
+        type : "submit",
+        value : "Search",
+        id : "search-submit",
+        class : "search-submit"
+    }
+
+    setAttributes(form,attributesForm);
+    setAttributes(search,attributesSearch);
+    setAttributes(submit,attributesSubmit);
+
+    searchDiv.appendChild(form);
+    form.appendChild(search);
+    form.appendChild(submit);
+
+    search.addEventListener("keyup",(e)=>{
+       const searchValue = search.value.toLowerCase();
+       for(let i = 0; i < results.length; i ++){
+           const firstName = results[i].name.first.toLowerCase();
+           if(firstName.includes(searchValue)){
+               console.log("YES")
+           }
+       }
+    })
+
+    return results
+}
+
+
+
+
+
+
+/**
  * Function that print the gallery markup to index.html 
  * @param {String} a request APIs URL address
  */
@@ -55,6 +122,13 @@ function printGellery(date){
     gallery.innerHTML = date;
 }
 
+
 getJSON(generateAPIUrl)
-.then(galleryMarkup)
-.then(printGellery)
+.then(searchBar)
+.then(date => console.log(date))
+// .then(galleryMarkup)
+// .then(printGellery)
+
+
+
+
