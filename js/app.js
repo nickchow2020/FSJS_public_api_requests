@@ -155,8 +155,8 @@ function galleryMarkupAppend(date){
     const infoDiv = document.createElement("div");
     const img = document.createElement('img');
     const h3Name = document.createElement("h3");
-    const emailP = document.createElement("p")
-    const cityStateP = document.createElement("p")
+    const emailP = document.createElement("p");
+    const cityStateP = document.createElement("p");
 
     cardDiv.classList.add("card");
     imgDiv.classList.add("card-img-container");
