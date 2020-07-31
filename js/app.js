@@ -3,10 +3,11 @@
 */
 const generateAPIUrl = "https://randomuser.me/api/?results=12";
 const gallery = document.getElementById("gallery");
-const searchDiv = document.querySelector(".search-container")
+const searchDiv = document.querySelector(".search-container");
 const body = document.querySelector("body");
 const closeButton = document.getElementById("modal-close-btn");
-
+let searchResults = [];
+let index;
 /**
  * Function that request the date from the server
  * @param {URL} a request APIs URL address
@@ -21,6 +22,16 @@ const closeButton = document.getElementById("modal-close-btn");
      }
 }
 
+/**
+ * function that called modalMarup() itself;
+ * @param {*} date 
+ */
+
+
+ function calledModalMarkUp(data){
+     return modalMarkup(data)
+ }
+
 
 /**
  * Function that request the date from the server
@@ -31,6 +42,27 @@ function modalMarkup(date){
     const modalDiv = document.createElement("div");
     const closeBtn = document.createElement("button");
     const modalInfoDiv = document.createElement("div");
+
+    const modalBtnDiv = document.createElement("div");
+    const prevBtn = document.createElement("button");
+    const nextBtn = document.createElement("button");
+
+    const prevBtnAttributes = {
+        type:"button",
+        id:"modal-prev",
+        class:"modal-prev btn"
+    }
+
+    const nextBtnAttributes = {
+        type:"button",
+        id: "modal-next",
+        class:"modal-next btn"
+    }
+    modalBtnDiv.classList.add("modal-btn-container");
+    setAttributes(prevBtn,prevBtnAttributes)
+    setAttributes(nextBtn,nextBtnAttributes)
+    prevBtn.textContent = "Prev";
+    nextBtn.textContent = "Next";
 
     modalContainer.classList.add("modal-container");
     body.appendChild(modalContainer);
@@ -64,15 +96,54 @@ function modalMarkup(date){
     modalDiv.appendChild(closeBtn);
     modalDiv.appendChild(modalInfoDiv);
     modalInfoDiv.innerHTML = modalHTML;
+    modalBtnDiv.appendChild(prevBtn)
+    modalBtnDiv.appendChild(nextBtn)
+    modalContainer.appendChild(modalBtnDiv);
 
     closeBtn.addEventListener("click",()=>{
-        modalContainer.style.display = "none";
+        body.removeChild(modalContainer);
     })
+
+    const noSearchResult = results;
+     prevBtn.addEventListener("click",()=>{
+         index -= 1;
+         if(searchResults.length > 0){
+             const data = searchResults[index];
+             if(data){
+                body.removeChild(modalContainer);
+                calledModalMarkUp(data);
+             }
+         }else{
+             const data = noSearchResult[index];
+             if(data){
+                body.removeChild(modalContainer);
+                calledModalMarkUp(data);
+             }
+         }
+    })
+
+    nextBtn.addEventListener("click",()=>{
+        index += 1;
+        if(searchResults.length > 0){
+            const data = searchResults[index];
+            if(data){
+               body.removeChild(modalContainer);
+               calledModalMarkUp(data);
+            }
+        }else{  
+            const data = noSearchResult[index];
+            if(data){
+               body.removeChild(modalContainer);
+               calledModalMarkUp(data);
+            }
+        }
+   })
+
+
 }
 
 /**
  * Function that request the date from the server 
- * and generate gallery markup HTML and retrun as string
  * @param {JSON} a array of object that container employee information
  */
 function galleryMarkupAppend(date){
@@ -122,6 +193,7 @@ function galleryMarkupAppend(date){
         for(let i = 0; i < resultDate.length; i ++){
            if(targetName === resultDate[i].name.first){
                targetObject = resultDate[i];
+               index = i;
            }
         }
         modalMarkup(targetObject);
@@ -149,7 +221,7 @@ function setAttributes(element,object){
  * @param {JSON} date that retrieve from the fetch() request
  */
 function searchBar(date){
-    const results = date;
+    window.results = date;
     const form = document.createElement("form");
     const search = document.createElement("input");
     const submit = document.createElement("input");
@@ -183,7 +255,6 @@ function searchBar(date){
 
     search.addEventListener("keyup",()=>{
        const searchValue = search.value.toLowerCase();
-       const searchResults = [];
        for(let i = 0; i < results.length; i ++){
            const firstName = results[i].name.first.toLowerCase();
            if(firstName.includes(searchValue)){
@@ -199,6 +270,3 @@ function searchBar(date){
 getJSON(generateAPIUrl)
 .then(galleryMarkupAppend)
 .then(searchBar)
-
-
-
