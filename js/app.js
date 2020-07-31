@@ -4,7 +4,8 @@
 const generateAPIUrl = "https://randomuser.me/api/?results=12";
 const gallery = document.getElementById("gallery");
 const searchDiv = document.querySelector(".search-container")
-
+const body = document.querySelector("body");
+const closeButton = document.getElementById("modal-close-btn");
 
 /**
  * Function that request the date from the server
@@ -18,6 +19,55 @@ const searchDiv = document.querySelector(".search-container")
      }catch(err){
          throw err
      }
+}
+
+
+/**
+ * Function that request the date from the server
+ * @param {object}
+ */
+function modalMarkup(date){
+    const modalContainer = document.createElement("div");
+    const modalDiv = document.createElement("div");
+    const closeBtn = document.createElement("button");
+    const modalInfoDiv = document.createElement("div");
+
+    modalContainer.classList.add("modal-container");
+    body.appendChild(modalContainer);
+    modalDiv.classList.add("modal");
+    modalInfoDiv.classList.add("modal-info-container");
+
+    const btnAttributes = {
+        type:"button",
+        id:"modal-close-btn",
+        class:"modal-close-btn"
+    }
+
+    setAttributes(closeBtn,btnAttributes);
+    closeBtn.innerHTML = `<strong>X</strong>`;
+
+    const getMonth = date.dob.date.slice(5,7);
+    const getDate = date.dob.date.slice(8,10);
+    const getYear = date.dob.date.slice(0,4);
+    const modalHTML = 
+    `
+            <img class="modal-img" src="${date.picture.large}" alt="profile picture">
+             <h3 id="name" class="modal-name cap">${date.name.first} ${date.name.last}</h3>
+            <p class="modal-text">${date.email}</p>
+            <p class="modal-text cap">${date.location.city}</p>
+            <hr>
+            <p class="modal-text">${date.cell}</p>
+            <p class="modal-text">${date.location.street.number} ${date.location.street.name} ${date.location.city} ${date.location.state} ${date.location.postcode}</p>
+            <p class="modal-text">Birthday: ${getMonth}/${getDate}/${getYear}</p>
+    `
+    modalContainer.appendChild(modalDiv);
+    modalDiv.appendChild(closeBtn);
+    modalDiv.appendChild(modalInfoDiv);
+    modalInfoDiv.innerHTML = modalHTML;
+
+    closeBtn.addEventListener("click",()=>{
+        modalContainer.style.display = "none";
+    })
 }
 
 /**
@@ -67,7 +117,14 @@ function galleryMarkupAppend(date){
     infoDiv.appendChild(cityStateP)
 
     cardDiv.addEventListener("click",(e)=>{
-        console.log(e.target)
+        const targetName = h3Name.textContent;
+        let targetObject;
+        for(let i = 0; i < resultDate.length; i ++){
+           if(targetName === resultDate[i].name.first){
+               targetObject = resultDate[i];
+           }
+        }
+        modalMarkup(targetObject);
     })
     }
     return resultDate
@@ -142,7 +199,6 @@ function searchBar(date){
 getJSON(generateAPIUrl)
 .then(galleryMarkupAppend)
 .then(searchBar)
-
 
 
 
