@@ -14,9 +14,9 @@ let index;//initial index varialbe
  */
  async function getJSON(url){
      try{
-        const twelveUser = await fetch(url);
-        const twelveUserJson = await twelveUser.json();
-        return twelveUserJson.results;
+        const employeeList = await fetch(url);
+        const employeeListJson = await employeeList.json();
+        return employeeListJson.results;
      }catch(err){
          throw err
      }
@@ -101,13 +101,29 @@ function modalMarkup(date){
     modalContainer.appendChild(modalBtnDiv);
     // end created modal components
 
+    //restore the employees date,12 employee data.
+    const noSearchResult = results;
+
+    //Adding disable feature when index equavilent to 0
+    if(index === 0){
+        prevBtn.setAttribute("disabled",true);
+        prevBtn.style.backgroundColor = "lightgrey";
+    }
+    //Adding disable feature when index equavilent to 12
+    if(index === noSearchResult.length - 1){
+        nextBtn.setAttribute("disabled",true);
+        nextBtn.style.backgroundColor = "lightgrey";
+    }
+    //Adding disable feature when index equavilent to search results's length
+    if(index === searchResults.length - 1){
+        nextBtn.setAttribute("disabled",true);
+        nextBtn.style.backgroundColor = "lightgrey";
+    }
+
     //close the modal when close button click
     closeBtn.addEventListener("click",()=>{
         body.removeChild(modalContainer);
     })
-
-    //restore the employees date,12 employee data.
-    const noSearchResult = results;
 
     //add event handler to Prev Button
     prevBtn.addEventListener("click",()=>{
@@ -258,7 +274,7 @@ function searchBar(date){
     }
 
     const attributesSubmit = {
-        type : "submit",
+        type : "button",
         value : "Search",
         id : "search-submit",
         class : "search-submit"
@@ -289,6 +305,12 @@ function searchBar(date){
        };
        galleryMarkupAppend(searchResults);
     })
+
+    //retrieve the date when X on search bar is clicks
+    search.addEventListener("search",()=> {
+        gallery.innerHTML = ""; // empty the gallery
+        galleryMarkupAppend(results);
+      });
 }
 
 
