@@ -278,8 +278,8 @@ function searchBar(date){
      * and display the results in real time.
      */
     search.addEventListener("keyup",()=>{
-       gallery.innerHTML = "";
-       searchResults.splice(0,searchResults.length)
+       gallery.innerHTML = ""; // empty the gallery
+       searchResults.splice(0,searchResults.length)//empty searchResults array
        const searchValue = search.value.toLowerCase();
        for(let i = 0; i < results.length; i ++){
            const firstName = results[i].name.first.toLowerCase();
