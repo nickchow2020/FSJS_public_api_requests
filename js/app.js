@@ -12,14 +12,14 @@ let index;//initial index varialbe
  * Used Try and catch to handle the error.
  * @param {URL} a request APIs URL address
  */
- async function getJSON(url){
-     try{
+async function getJSON(url){
+    try{
         const employeeList = await fetch(url);
         const employeeListJson = await employeeList.json();
         return employeeListJson.results;
-     }catch(err){
-         throw err
-     }
+    }catch(err){
+        throw err
+    }
 }
 
 /**
@@ -27,9 +27,9 @@ let index;//initial index varialbe
  * @param {object} employee current object 
  */
 
- function calledModalMarkUp(data){
-     return modalMarkup(data);
- }
+function calledModalMarkUp(data){
+    return modalMarkup(data);
+}
 
 
 /**
@@ -84,7 +84,7 @@ function modalMarkup(date){
     const modalHTML = 
     `
             <img class="modal-img" src="${date.picture.large}" alt="profile picture">
-             <h3 id="name" class="modal-name cap">${date.name.first} ${date.name.last}</h3>
+            <h3 id="name" class="modal-name cap">${date.name.first} ${date.name.last}</h3>
             <p class="modal-text">${date.email}</p>
             <p class="modal-text cap">${date.location.city}</p>
             <hr>
@@ -127,20 +127,20 @@ function modalMarkup(date){
 
     //add event handler to Prev Button
     prevBtn.addEventListener("click",()=>{
-         if(index > 0){
+        if(index > 0){
             index -= 1;
-         }
+        }
             if(searchResults.length > 0){
                 const data = searchResults[index];
                 if(data){
-                   body.removeChild(modalContainer);
-                   calledModalMarkUp(data);
+                body.removeChild(modalContainer);
+                calledModalMarkUp(data);
                 }
             }else{
                 const data = noSearchResult[index];
                 if(data){
-                   body.removeChild(modalContainer);
-                   calledModalMarkUp(data);
+                body.removeChild(modalContainer);
+                calledModalMarkUp(data);
                 }
             }
     })
@@ -152,8 +152,8 @@ function modalMarkup(date){
                 }
                 const data = searchResults[index];
                 if(data){
-                   body.removeChild(modalContainer);
-                   calledModalMarkUp(data);
+                body.removeChild(modalContainer);
+                calledModalMarkUp(data);
                 }
             }else{  
                 if(index < noSearchResult.length - 1){
@@ -161,11 +161,11 @@ function modalMarkup(date){
                 }
                 const data = noSearchResult[index];
                 if(data){
-                   body.removeChild(modalContainer);
-                   calledModalMarkUp(data);
+                body.removeChild(modalContainer);
+                calledModalMarkUp(data);
                 }
             }
-   })
+})
 }
 
 /**
@@ -220,10 +220,10 @@ function galleryMarkupAppend(date){
         const targetName = h3Name.textContent;
         let targetObject;
         for(let i = 0; i < resultDate.length; i ++){
-           if(targetName === resultDate[i].name.first){
-               targetObject = resultDate[i];
-               index = i;
-           }
+        if(targetName === resultDate[i].name.first){
+            targetObject = resultDate[i];
+            index = i;
+        }
         }
         modalMarkup(targetObject);
     })
@@ -295,22 +295,22 @@ function searchBar(date){
      */
     search.addEventListener("keyup",()=>{
        gallery.innerHTML = ""; // empty the gallery
-       searchResults.splice(0,searchResults.length)//empty searchResults array
-       const searchValue = search.value.toLowerCase();
-       for(let i = 0; i < results.length; i ++){
-           const firstName = results[i].name.first.toLowerCase();
-           if(firstName.includes(searchValue)){
+    searchResults.splice(0,searchResults.length)//empty searchResults array
+    const searchValue = search.value.toLowerCase();
+    for(let i = 0; i < results.length; i ++){
+        const firstName = results[i].name.first.toLowerCase();
+        if(firstName.includes(searchValue)){
             searchResults.push(results[i]);
-           };
-       };
-       galleryMarkupAppend(searchResults);
+        };
+    };
+    galleryMarkupAppend(searchResults);
     })
 
     //retrieve the date when X on search bar is clicks
     search.addEventListener("search",()=> {
         gallery.innerHTML = ""; // empty the gallery
         galleryMarkupAppend(results);
-      });
+    });
 }
 
 
