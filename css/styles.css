@@ -16,7 +16,7 @@ html, body {
 body {
     font-family: "Nunito", sans-serif;
     text-align: center;
-    background: rgba(235, 235, 235, 0.9);
+    background: rgba(255, 99, 71, 0.2);
 }
 
 header {
@@ -29,14 +29,16 @@ header {
 }
 
 header h1 {
-    font-size: 1.25em;
-    color: rgba(50, 50, 50, 0.9);
+    font-size: 2.25rem;
+    color: white;
+    text-shadow: 0 0 2px black;
     margin-top: 35px;
+    font-weight: bolder;
 }
 
 .search-input {
     padding: 0.4rem 1rem;
-    border: 1px solid rgba(200, 200, 200, 0.9);
+    border: 2px solid rgba(255, 99, 71, 0.3);
     border-radius: 0.25rem 0 0 0.25rem ;
     max-width: 20rem;
     transition: .4s ease-out;
@@ -44,7 +46,7 @@ header h1 {
 }
 
 .search-input:active, .search-input:hover, .search-input:focus {
-    border: 1px solid rgba(50, 50, 50, 0.9);
+    border: 2px solid rgba(255, 99, 71, 0.9);
 }
 
 .search-submit {
@@ -52,14 +54,14 @@ header h1 {
     height: 33px;
     background: rgba(245, 245, 245, 0.9);
     border-radius: 0 0.25rem 0.25rem 0;
-    border: 1px solid rgba(200, 200, 200, 0.9);
+    border: 2px solid rgba(255, 99, 71, 0.3);
     transition: .4s ease-out;
     outline: none;
 }
 
 .search-submit:active, .search-submit:hover, .search-submit:focus {
     background: rgba(255, 255, 255, 0.9);
-    border: 1px solid rgba(50, 50, 50, 0.9);
+    border: 2px solid rgba(255, 99, 71, 0.9);
 }
 
 
@@ -87,9 +89,9 @@ header h1 {
     max-width: 360px;
     margin: 10px 10px 20px;
     padding: 10px;
-    background: rgba(245, 245, 245, 0.9);
-    border-radius: 0.25em;
-    border: 1px solid rgba(50, 50, 50, 0.3);
+    background: white;
+    border-radius: 1.25em;
+    border: 2px solid rgba(255, 99, 71, 0.5);
     transition: .4s ease-out;
     overflow: hidden;
 }
@@ -152,10 +154,11 @@ header h1 {
     right: 15px;
     cursor: pointer;
     color: rgba(255, 255, 255, 0.9);
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(255, 99, 71, 0.9);
     outline: none;
     border-radius: 0.25em;
-    border: 1px solid rgba(50, 50, 50, 0.3);
+    border: none;
+    box-shadow: 0 0 5px black;
 }
 
 .modal-img {
@@ -201,10 +204,12 @@ header h1 {
     text-transform: uppercase;
     color: rgba(255, 255, 255, 0.9);
     padding: 0.75em 1.5em;
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(255, 99, 71, 0.9);
     border-radius: 0.35em;
     transition: .4s ease-out;
     outline: none;
+    border:none;
+    box-shadow: 0 0 5px black;
   }
   
 
@@ -248,8 +253,8 @@ header h1 {
 @media (min-width: 1024px) {
 
     .card:hover {
-        background: rgba(255, 255, 255, 1);
-        border: 1px solid rgba(50, 50, 50, 0.9);
+        background: rgba(255, 99, 71, 0.1);
+        border: 2px solid rgba(255, 99, 71, 0.9);
     }
 
     .card:hover .card-text {

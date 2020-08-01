@@ -1,15 +1,15 @@
 /** 
  * Global Variable use In this Project
 */
-const generateAPIUrl = "https://randomuser.me/api/?results=12";
-const gallery = document.getElementById("gallery");
-const searchDiv = document.querySelector(".search-container");
-const body = document.querySelector("body");
-const closeButton = document.getElementById("modal-close-btn");
-const searchResults = [];
-let index;
+const generateAPIUrl = "https://randomuser.me/api/?results=12"; //API URL
+const gallery = document.getElementById("gallery");// gallery display area
+const searchDiv = document.querySelector(".search-container");//searchbar wrapper
+const body = document.querySelector("body");//target body tags
+const searchResults = [];//stored searches employee object
+let index;//initial index varialbe
 /**
- * Function that request the date from the server
+ * Function that request the date from the server and convert it to JSON Date
+ * Used Try and catch to handle the error.
  * @param {URL} a request APIs URL address
  */
  async function getJSON(url){
@@ -23,10 +23,9 @@ let index;
 }
 
 /**
- * function that called modalMarup() itself;
- * @param {*} date 
+ * function that recalled modalMarup() itself;
+ * @param {object} employee current object 
  */
-
 
  function calledModalMarkUp(data){
      return modalMarkup(data);
@@ -34,10 +33,11 @@ let index;
 
 
 /**
- * Function that request the date from the server
- * @param {object}
+ * Function that generate modal markup structure and it's click events on "prev" and "next" buttons. 
+ * @param {object} current employees object
  */
 function modalMarkup(date){
+    // start created modal components
     const modalContainer = document.createElement("div");
     const modalDiv = document.createElement("div");
     const closeBtn = document.createElement("button");
@@ -99,13 +99,18 @@ function modalMarkup(date){
     modalBtnDiv.appendChild(prevBtn)
     modalBtnDiv.appendChild(nextBtn)
     modalContainer.appendChild(modalBtnDiv);
+    // end created modal components
 
+    //close the modal when close button click
     closeBtn.addEventListener("click",()=>{
         body.removeChild(modalContainer);
     })
 
+    //restore the employees date,12 employee data.
     const noSearchResult = results;
-     prevBtn.addEventListener("click",()=>{
+
+    //add event handler to Prev Button
+    prevBtn.addEventListener("click",()=>{
          if(index > 0){
             index -= 1;
          }
@@ -114,21 +119,17 @@ function modalMarkup(date){
                 if(data){
                    body.removeChild(modalContainer);
                    calledModalMarkUp(data);
-                   console.log(index);
                 }
             }else{
                 const data = noSearchResult[index];
                 if(data){
                    body.removeChild(modalContainer);
                    calledModalMarkUp(data);
-                   console.log(index);
                 }
             }
     })
-
+    //add event handler to Next Button
     nextBtn.addEventListener("click",()=>{
-            
-        console.log(index);
             if(searchResults.length > 0){
                 if(index < searchResults.length - 1){
                     index += 1;
@@ -149,16 +150,16 @@ function modalMarkup(date){
                 }
             }
    })
-
-
 }
 
 /**
- * Function that request the date from the server 
- * @param {JSON} a array of object that container employee information
+ * Function that generate the gallery markup components and click events on card Div.
+ * @param {JSON} a array of object that container employees information.
  */
 function galleryMarkupAppend(date){
+    //stored employee date
     const resultDate = date;
+    //start generated employees components
     for(let i=0; i<resultDate.length; i++){
 
     const cardDiv = document.createElement("div");
@@ -198,6 +199,7 @@ function galleryMarkupAppend(date){
     infoDiv.appendChild(emailP)
     infoDiv.appendChild(cityStateP)
 
+    // event handler on cardDiv
     cardDiv.addEventListener("click",(e)=>{
         const targetName = h3Name.textContent;
         let targetObject;
@@ -210,14 +212,17 @@ function galleryMarkupAppend(date){
         modalMarkup(targetObject);
     })
     }
+    //end generated employees components
+
+    //return employees date
     return resultDate;
 }
 
 /**
- * function that allow to generate multiple attribute at one single step,
- * by using for in loops
- * @param {element}  element needs set attribute
- * @param {object}  object of attribute in key-value pair
+ * function that allow to generate multiple attributes at one single step,
+ * by using for in loops,
+ * @param {element}  element needs set attribute,
+ * @param {object}  object of attributes in key-value pair,
  */
 function setAttributes(element,object){
     for(let key in object){
@@ -229,10 +234,13 @@ function setAttributes(element,object){
 
 /**
  * function that is going to create search bar and it's functionality.
- * @param {JSON} date that retrieve from the fetch() request
+ * @param {JSON} date of employees object
  */
 function searchBar(date){
+    //globalize variable: results
     window.results = date;
+
+    //start generate searchBar componentes
     const form = document.createElement("form");
     const search = document.createElement("input");
     const submit = document.createElement("input");
@@ -263,7 +271,12 @@ function searchBar(date){
     searchDiv.appendChild(form);
     form.appendChild(search);
     form.appendChild(submit);
+    //end generate searchBar componentes
 
+    /**
+     * add search event handler,sorts the matches employee's object into "searchResults" array
+     * and display the results in real time.
+     */
     search.addEventListener("keyup",()=>{
        gallery.innerHTML = "";
        searchResults.splice(0,searchResults.length)
@@ -274,12 +287,13 @@ function searchBar(date){
             searchResults.push(results[i]);
            };
        };
-       console.log(searchResults);
        galleryMarkupAppend(searchResults);
     })
 }
 
 
+//executed getJSON function with then and catch;
 getJSON(generateAPIUrl)
 .then(galleryMarkupAppend)
 .then(searchBar)
+.catch(err => console.log(err))
