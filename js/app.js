@@ -6,7 +6,7 @@ const gallery = document.getElementById("gallery");
 const searchDiv = document.querySelector(".search-container");
 const body = document.querySelector("body");
 const closeButton = document.getElementById("modal-close-btn");
-let searchResults = [];
+const searchResults = [];
 let index;
 /**
  * Function that request the date from the server
@@ -29,7 +29,7 @@ let index;
 
 
  function calledModalMarkUp(data){
-     return modalMarkup(data)
+     return modalMarkup(data);
  }
 
 
@@ -59,8 +59,8 @@ function modalMarkup(date){
         class:"modal-next btn"
     }
     modalBtnDiv.classList.add("modal-btn-container");
-    setAttributes(prevBtn,prevBtnAttributes)
-    setAttributes(nextBtn,nextBtnAttributes)
+    setAttributes(prevBtn,prevBtnAttributes);
+    setAttributes(nextBtn,nextBtnAttributes);
     prevBtn.textContent = "Prev";
     nextBtn.textContent = "Next";
 
@@ -106,37 +106,48 @@ function modalMarkup(date){
 
     const noSearchResult = results;
      prevBtn.addEventListener("click",()=>{
-         index -= 1;
-         if(searchResults.length > 0){
-             const data = searchResults[index];
-             if(data){
-                body.removeChild(modalContainer);
-                calledModalMarkUp(data);
-             }
-         }else{
-             const data = noSearchResult[index];
-             if(data){
-                body.removeChild(modalContainer);
-                calledModalMarkUp(data);
-             }
+         if(index > 0){
+            index -= 1;
          }
+            if(searchResults.length > 0){
+                const data = searchResults[index];
+                if(data){
+                   body.removeChild(modalContainer);
+                   calledModalMarkUp(data);
+                   console.log(index);
+                }
+            }else{
+                const data = noSearchResult[index];
+                if(data){
+                   body.removeChild(modalContainer);
+                   calledModalMarkUp(data);
+                   console.log(index);
+                }
+            }
     })
 
     nextBtn.addEventListener("click",()=>{
-        index += 1;
-        if(searchResults.length > 0){
-            const data = searchResults[index];
-            if(data){
-               body.removeChild(modalContainer);
-               calledModalMarkUp(data);
+            
+        console.log(index);
+            if(searchResults.length > 0){
+                if(index < searchResults.length - 1){
+                    index += 1;
+                }
+                const data = searchResults[index];
+                if(data){
+                   body.removeChild(modalContainer);
+                   calledModalMarkUp(data);
+                }
+            }else{  
+                if(index < noSearchResult.length - 1){
+                    index += 1;
+                }
+                const data = noSearchResult[index];
+                if(data){
+                   body.removeChild(modalContainer);
+                   calledModalMarkUp(data);
+                }
             }
-        }else{  
-            const data = noSearchResult[index];
-            if(data){
-               body.removeChild(modalContainer);
-               calledModalMarkUp(data);
-            }
-        }
    })
 
 
@@ -199,7 +210,7 @@ function galleryMarkupAppend(date){
         modalMarkup(targetObject);
     })
     }
-    return resultDate
+    return resultDate;
 }
 
 /**
@@ -254,14 +265,16 @@ function searchBar(date){
     form.appendChild(submit);
 
     search.addEventListener("keyup",()=>{
+       gallery.innerHTML = "";
+       searchResults.splice(0,searchResults.length)
        const searchValue = search.value.toLowerCase();
        for(let i = 0; i < results.length; i ++){
            const firstName = results[i].name.first.toLowerCase();
            if(firstName.includes(searchValue)){
-               searchResults.push(results[i])
+            searchResults.push(results[i]);
            };
        };
-       gallery.innerHTML = "";
+       console.log(searchResults);
        galleryMarkupAppend(searchResults);
     })
 }
